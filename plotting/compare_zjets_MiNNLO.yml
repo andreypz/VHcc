@@ -7,7 +7,11 @@ input :
 #  - output_GenZjets_v17/output.coffea  # VPT>0; added LHE_Njets bins
 #  - output_GenZjets_v21/output.coffea  # VPT>60; and 2l2j for dilep plots
 #  - output/output_GenZjets_v28/output.coffea
-  - /user/andreypz/cernbox/projects/Hcc/VplusJets/plots_2023_11_09_GenPlots_ZPt0/output.coffea
+#  - /user/andreypz/cernbox/projects/Hcc/VplusJets/plots_2023_11_09_GenPlots_ZPt0/output.coffea
+#  - /user/andreypz/cernbox/projects/Hcc/VplusJets/plots_2023_11_09_GenPlots_ZPt60/output.coffea
+# - output/GenZjets_v141/output.coffea  #-- non-weighted MinnLO, full sample here 
+# - output/GenZjets_v143/output.coffea  #-- weighted MinnLO, full sample here 
+ - output/GenZjets_v153/output.coffea
 
 mergemap:
    MiNNLO:
@@ -28,7 +32,10 @@ mergemap:
    #FxFx:
    #   list:
    #    - DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8
-
+   Herwig:
+     list:
+       - DYToLL_NLO_5FS_TuneCH3_13TeV_matchbox_herwig7
+   
 ## Required, reference dict
 reference:
    MiNNLO:
@@ -52,6 +59,9 @@ compare:
     MiNNLO_Zpt_offi:
        label: MiNNLO Zpt weight
        color: 'C5'
+    Herwig:
+       label: Herwig
+       color: 'C2'
 
 ## Required, variable set
 variable:
@@ -112,8 +122,9 @@ rescale_yields:
   #MiNNLO_Zpt_priv: 2
   #MiNNLO_Zpt_offi: 2
 
-com : "13"
+com :
 lumi : 140000
-inbox_text: "Private Work" # Optional, text write in anchor text box
-label: Simulation 
+inbox_text: "" # Optional, text write in anchor text box
+label: 
+#label: Simulation
 log : False # Optional, log y axis

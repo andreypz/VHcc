@@ -74,10 +74,12 @@ class NanoProcessor(processor.ProcessorABC):
             "dijet_pt": Hist.axis.Regular(100, 0, 400, name="dijet_pt", label="dijet_pt"),
             "dijet_dr": Hist.axis.Regular(60, 0, 5, name="dijet_dr", label="dijet_dr"),
             #'dijet_dr_neg': Hist.axis.Regular(50, 0, 5,    name="dijet_dr", label="dijet_dr")
+
+            "st": Hist.axis.Regular(50, 0, 2000, name="st", label="St"),
         }
 
         histDict1 = {
-            observable: Hist.Hist(var_axis, lepflav_axis, jetflav_axis, name="Counts", storage="Weight") if 'dijet' in observable
+            observable: Hist.Hist(var_axis, lepflav_axis, jetflav_axis, name="Counts", storage="Weight") if 'dijet' in observable or observable=='st'
             else Hist.Hist(var_axis, lepflav_axis, name="Counts", storage="Weight")
             for observable, var_axis in multi_axis.items()
         }
@@ -277,7 +279,8 @@ class NanoProcessor(processor.ProcessorABC):
         # ==============
 
         muons = events.Muon
-        musel = ((muons.pt > 18) & (abs(muons.eta) < 2.4) & (muons.tightId == True) & (muons.pfRelIso04_all<0.25) )
+        # pt>18
+        musel = ((muons.pt > 48) & (abs(muons.eta) < 2.4) & (muons.tightId == True) & (muons.pfRelIso04_all<0.25) )
                  #(abs(muons.dxy) < 0.06) & (abs(muons.dz)<0.2) )
         # but 25GeV and 0.06 for 1L, xy 0.05 z 0.2, &(abs(muons.dxy)<0.06)&(abs(muons.dz)<0.2) and tightId for 1L
         muons = muons[musel]
@@ -288,7 +291,7 @@ class NanoProcessor(processor.ProcessorABC):
 
 
         electrons = events.Electron
-        elesel = ((electrons.pt > 18) & (abs(electrons.eta) < 2.4) & ((abs(electrons.eta) > 1.5660) | (abs(electrons.eta) < 1.4442)) &
+        elesel = ((electrons.pt > 48) & (abs(electrons.eta) < 2.4) & ((abs(electrons.eta) > 1.5660) | (abs(electrons.eta) < 1.4442)) &
                   (electrons.mvaFall17V2Iso_WP80==1) & (electrons.pfRelIso03_all<0.06) 
               )
         #elesel = ((electrons.pt > 20) & (abs(electrons.eta) < 2.5) & ((abs(electrons.eta) > 1.5660) | (abs(electrons.eta) < 1.4442)) &
@@ -316,7 +319,7 @@ class NanoProcessor(processor.ProcessorABC):
 
         dileptons = ak.combinations(leptons, 2, fields=["lep1", "lep2"])
 
-        pt_cut = (dileptons["lep1"].pt > 33) & (dileptons["lep2"].pt > 18)
+        pt_cut = (dileptons["lep1"].pt > 50) & (dileptons["lep2"].pt > 18) # pt>33
         #Zmass_cut = np.abs( (dileptons["lep1"] + dileptons["lep2"]).mass - 91.19) < 15
         Zmass_cut = ((dileptons["lep1"] + dileptons["lep2"]).mass > 60) & ((dileptons["lep1"] + dileptons["lep2"]).mass < 120)
         Vpt_cut = (dileptons["lep1"] + dileptons["lep2"]).pt > self.cfg.user['cuts']['vpt']
@@ -406,7 +409,7 @@ class NanoProcessor(processor.ProcessorABC):
 
 
         jetsel = ak.fill_none(
-            (events.Jet.pt > 25)
+            (events.Jet.pt > 50) # 25
             & (abs(events.Jet.eta) <= 2.4)
             & ((events.Jet.puId > 6) | (events.Jet.pt > 50))
             & (events.Jet.jetId > 5)
@@ -464,6 +467,7 @@ class NanoProcessor(processor.ProcessorABC):
         dijet_m  = dijet.mass
         dijet_dr = good_jets[:, 0].delta_r(good_jets[:, 1])
 
+        st = z_cand[selection_2l2j].lep1.pt + z_cand[selection_2l2j].lep2.pt +  good_jets.pt[:, 0]+good_jets.pt[:, 1]
         #print(len(lepflav[selection_2l2j]), len(jetflav), len(dileptons[selection_2l2j].lep1.pt), len(good_jets[:, 0]), len(weights.weight()[selection_2l2j]))
         
         #output["lep1_pt"].fill(lepflav=lepflav[selection_2l2j], jetflav=jetflav,
@@ -486,6 +490,8 @@ class NanoProcessor(processor.ProcessorABC):
         output["dijet_pt"].fill(lepflav=lepflav[selection_2l2j], jetflav=jetflav, dijet_pt=dijet_pt, weight=weights.weight()[selection_2l2j])
 
         output["dijet_dr_mjj"].fill(lepflav=lepflav[selection_2l2j], jetflav=jetflav, dijet_dr=dijet_dr, dijet_mBin=dijet_m, weight=weights.weight()[selection_2l2j])
+
+        output["st"].fill(lepflav=lepflav[selection_2l2j], jetflav=jetflav, st=st, weight=weights.weight()[selection_2l2j])
 
         ##print("Negative DRs:", dijet_dr[weight<0])
         ##print("Negative wei:", weight[weight<0])

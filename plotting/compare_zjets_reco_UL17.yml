@@ -1,4 +1,4 @@
-output: "Reco_Zjets_UL17_ZMuMu"
+output: "Reco_Zjets_UL17_ZLL"
 scaleToLumi : True
 
 ## Required, input files
@@ -7,8 +7,9 @@ input :
 #  - output/recoZjets_UL17_v24/output.coffea  # Zpt > 60 cut
 
 ## After bug fixes:
-#   - output/recoZjets_UL17_v34/output.coffea  # Zpt>0
-   - output/recoZjets_UL17_v37/output.coffea  # Zpt>60
+#   - output/recoZjets_UL17_v34/output.coffea  # Zpt>0, Good
+#   - output/recoZjets_UL17_v37/output.coffea  # Zpt>60, Good
+   - output/recoZjets_UL17_v43/output.coffea  # Add st
 
 mergemap:
    MiNNLO:
@@ -63,77 +64,81 @@ compare:
     #  label: Data
     #  color : Black
 
-## Required, variable set
 variable :
     dijet_dr:
       axis:
-        lepflav: sum
+        lepflav: el
         jetflav: sum
       xlabel: "dR(jj)"
-
     dijet_m:
       axis:
-        lepflav: sum
+        lepflav: el
         jetflav: sum
     dijet_pt:
        axis:
-         lepflav: sum
+         lepflav: el
          jetflav: sum
 
     dijet_dr_mjj:
       axis:
-        lepflav: sum
+        lepflav: el
         jetflav: sum
         dijet_mBin: 1
       xlabel: "dR(jj) in [bin 1] of m(jj)"
 
+    st:
+       axis:
+         lepflav: el
+         jetflav: sum
+
     dilep_pt:
       axis:
-        lepflav: sum
+        lepflav: el
       xlabel: "$p_T$(V)"
 
     dilep_dr:
       axis:
-        lepflav: sum
+        lepflav: el
       xlabel: "dR(lep1, lep2)"
 
     njet25:
       axis:
-        lepflav: sum
+        lepflav: el
 
     lep1_pt:
       axis:
-        lepflav: sum
+        lepflav: el
     lep2_pt:
       axis:
-        lepflav: sum
+        lepflav: el
 
     jet1_pt:
       axis:
-        lepflav: sum
+        lepflav: el
         jetflav: sum
     jet2_pt:
       axis:
-        lepflav: sum
+        lepflav: el
         jetflav: sum
     jet1_dRlep:
       axis:
-        lepflav: sum
+        lepflav: el
         jetflav: sum
     jet2_dRlep:
       axis:
-        lepflav: sum
+        lepflav: el
         jetflav: sum
     dilep_m:
       axis:
-        lepflav: sum
+        lepflav: el
+
     nlep:
     npv0:
       axis:
-        lepflav: sum
+        lepflav: el
     npv1:
       axis:
-        lepflav: sum
+        lepflav: el
 
 #    ndilep:
 #    LHE_Vpt:

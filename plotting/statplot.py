@@ -106,7 +106,8 @@ print(rel_err_2)
 
 fig, ax = plt.subplots(figsize=(10, 8))
 fig.subplots_adjust(hspace=0.06, top=0.92, bottom=0.1, right=0.97)
-hep.cms.label(label, lumi=None, year=None, com=config["com"], data=False, loc=0, ax=ax)
+#hep.cms.label(label, lumi=None, year=None, com=config["com"], data=False, loc=0, ax=ax)
+hep.cms.label(label, exp="MC", rlabel="", com=None, data=False, loc=0, ax=ax)
 
 hep.histplot([rel_err_1, rel_err_2], ax_edges, label=["Nominal", "Z-pt weighted"], histtype="step",  yerr=False, ax=ax)
 ax.legend(title="Stat uncertainty of\nPowheg MiNNLO\nZ+Jets sample", loc=9, title_fontsize=16)

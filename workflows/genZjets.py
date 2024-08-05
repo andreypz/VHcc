@@ -133,6 +133,7 @@ class NanoProcessor(processor.ProcessorABC):
             & (np.abs(particles.eta) < 2.5)
             & (particles.pt > 20)
         ]
+        leptons = leptons[ak.argsort(leptons.pt, axis=1, ascending=False)]        
 
         #nEl = ak.sum(leptons[np.abs(leptons.pdgId)==11])
         #nMu = ak.sum(leptons[np.abs(leptons.pdgId)==13])
@@ -144,6 +145,7 @@ class NanoProcessor(processor.ProcessorABC):
         #print(dataset, "gen jets:", psutil.Process(getpid()).memory_info().rss / 1024 ** 2, "MB")
         #genjets = events.GenJet
         jets25 = events.GenJet[(np.abs(events.GenJet.eta) < 2.5) & (events.GenJet.pt > 25)]
+        #jets25 = jets25[ak.argsort(jets25.pt, axis=1, ascending=False)]
 
         '''
         LHEP = events.LHEPart
@@ -169,6 +171,7 @@ class NanoProcessor(processor.ProcessorABC):
                 "DYJetsToMuMu_M-50_TuneCP5_ZptWeighted_13TeV-powhegMiNNLO-pythia8-photos",
                 "DYJetsToEE_M-50_TuneCP5_ZptWeighted_13TeV-powhegMiNNLO-pythia8-photos",
                 "DYjetstomumu_01234jets_Pt-0ToInf_13TeV-sherpa",
+                "DYToLL_NLO_5FS_TuneCH3_13TeV_matchbox_herwig7",
                 "DYJets_UNLOPS"
         ]:
             weight_nosel = events.genWeight
@@ -251,6 +254,7 @@ class NanoProcessor(processor.ProcessorABC):
                 "DYJetsToMuMu_M-50_TuneCP5_ZptWeighted_13TeV-powhegMiNNLO-pythia8-photos",
                 "DYJetsToEE_M-50_TuneCP5_ZptWeighted_13TeV-powhegMiNNLO-pythia8-photos",
                 "DYjetstomumu_01234jets_Pt-0ToInf_13TeV-sherpa",
+                "DYToLL_NLO_5FS_TuneCH3_13TeV_matchbox_herwig7",
                 "DYJets_UNLOPS",
         ]:
             weight_full = events_2l2j.genWeight
@@ -275,7 +279,7 @@ class NanoProcessor(processor.ProcessorABC):
         dijets = good_jets[selection_2l2j]
 
         #jetflav = dijets.hadronFlavour + 1*( (dijets.partonFlavour == 0) & (dijets.hadronFlavour == 0))
-        #dijets2 = dijets[ak.argsort(dijets.pt, axis=1, ascending=False)]
+        #dijets = dijets[ak.argsort(dijets.pt, axis=1, ascending=False)]
         #print(dataset, len(jetflav), '\n', jetflav)# '\n', dijets.pt, '\n', dijets2.pt)
 
         dijet = dijets[:, 0] + dijets[:, 1]
@@ -305,8 +309,8 @@ class NanoProcessor(processor.ProcessorABC):
 
         output["lep1_pt"].fill(lepflav=lepflav[selection_2l], lep1_pt=leptons.pt[selection_2l][:, 0], weight=weight_2l)
         output["lep1_eta"].fill(lepflav=lepflav[selection_2l],lep1_eta=leptons.eta[selection_2l][:, 0], weight=weight_2l)
-        output["lep2_pt"].fill(lepflav=lepflav[selection_2l], lep2_pt=leptons.pt[selection_2l][:, 0], weight=weight_2l)
-        output["lep2_eta"].fill(lepflav=lepflav[selection_2l],lep2_eta=leptons.eta[selection_2l][:, 0], weight=weight_2l)
+        output["lep2_pt"].fill(lepflav=lepflav[selection_2l], lep2_pt=leptons.pt[selection_2l][:, 1], weight=weight_2l)
+        output["lep2_eta"].fill(lepflav=lepflav[selection_2l],lep2_eta=leptons.eta[selection_2l][:, 1], weight=weight_2l)
 
         # Plots with 2L2J selection
 

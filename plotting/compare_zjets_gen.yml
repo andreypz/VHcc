@@ -6,7 +6,10 @@ input :
  #  - output_GenZjets_v23/output.coffea  # VPT>60; and 2l2j for dilep plots; LHE_NJets bins
  #  - output_GenZjets_v32/output.coffea # Same with MLM+Herwig sample
  # - output_GenZjets_v43/output.coffea # everything after bug fixes
-  - output/output_GenZjets_v28/output.coffea # Everything and Zpt>60
+ # - output/output_GenZjets_v28/output.coffea # Everything and Zpt>60 # lep1=lep2 mistake
+ # - output/GenZjets_v05/output.coffea # Everything with Zpt>60
+ #  - output/GenZjets_v156/output.coffea  # Revive Aug 2024, with new Herwig Matchbox, Zpt>60
+  - output/GenZjets_v157/output.coffea  # Revive Aug 2024, with new Herwig Matchbox, Zpt>0
 
 mergemap:
    MiNNLO:
@@ -27,17 +30,18 @@ mergemap:
    FxFx:
       list:
        - DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8
-   Sherpa:
-      list:
-       - DYjetstomumu_01234jets_Pt-0ToInf_13TeV-sherpa
+#   Sherpa:
+#      list:
+#       - DYjetstomumu_01234jets_Pt-0ToInf_13TeV-sherpa
    Herwig:
       list:
-       - DYJetsToLL_M-50_TuneCH3_13TeV-madgraphMLM-herwig7
+        #- DYJetsToLL_M-50_TuneCH3_13TeV-madgraphMLM-herwig7
+        - DYToLL_NLO_5FS_TuneCH3_13TeV_matchbox_herwig7
+
    #UNLOPS:
    #   list:
    #    - DYJets_UNLOPS
 
-## Required, reference dict
 reference:
    #MiNNLO:
    #    label: MiNNLO
@@ -46,7 +50,6 @@ reference:
      label: FxFx
      color : 'C4'
 
-## Required, compare dict
 compare:
     MLM:
       label: "MLM x1.33"
@@ -63,17 +66,17 @@ compare:
     MiNNLO_Zpt_offi:
        label: MiNNLO_Zpt_offi
        color: 'C5'
-    Sherpa:
-       label: Sherpa
-       color: 'C6'
+#    Sherpa:
+#       label: Sherpa
+#       color: 'C6'
     Herwig:
-       label: Herwig7 x0.6
+#       label: Herwig7 x0.6
+       label: Herwig7 x1.33
        color: Orange
     #UNLOPS:
     #   label: UNLOPS
     #   color: 'C6'
 
-## Required, variable set
 variable:
    ## specify variable to plot
    dijet_dr:
@@ -146,17 +149,18 @@ ratio_ylim:
 
 rescale_yields:
   MLM: 1.33
-  Herwig: 0.6
+  #  Herwig: 0.6  # pre-UL Herwig
+  Herwig: 1.33
   #FxFx: 0.5
   #MiNNLO: 2
   MiNNLO_Zpt_priv: 2
   #MiNNLO_Zpt_offi: 2
-  Sherpa: 2
+  #Sherpa: 2
   #UNLOPS: 2
 
 com : "13"
 lumi : 140000
 inbox_text: "Private Work" # Optional, text write in anchor text box
-label: Simulation Preliminary
+label: #Simulation Preliminary
 norm : False # Optional, normalize to reference yields
 log : False # Optional, log y axis
